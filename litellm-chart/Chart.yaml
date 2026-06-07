@@ -1,0 +1,6 @@
+apiVersion: v2
+name: litellm-gateway
+description: LiteLLM LLM Gateway for Eli Lilly - routes traffic across Claude, GPT-4o and internal models
+type: application
+version: 0.1.0
+appVersion: "main-latest"
