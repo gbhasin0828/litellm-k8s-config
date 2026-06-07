@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: litellm-config
+  namespace: {{ .Values.namespace }}
+data:
+  config.yaml: |
+    model_list:
+
+      # lilly-smart: routes to Claude or GPT-4o, least busy wins
+      # if one provider is down, automatically fails over to the other
+      - model_name: lilly-smart
+        litellm_params:
+          model: anthropic/claude-sonnet-4-5
+          api_key: os.environ/ANTHROPIC_API_KEY
+
+      - model_name: lilly-smart
+        litellm_params:
+          model: openai/gpt-4o
+          api_key: os.environ/OPENAI_API_KEY
+
+      # lilly-compliance: Claude only
+      # for teams with regulatory requirement to use Claude exclusively
+      - model_name: lilly-compliance
+        litellm_params:
+          model: anthropic/claude-sonnet-4-5
+          api_key: os.environ/ANTHROPIC_API_KEY
+
+    router_settings:
+      routing_strategy: {{ .Values.routing.strategy }}
+      num_retries: {{ .Values.routing.numRetries }}
+      timeout: {{ .Values.routing.timeout }}
+      retry_after: {{ .Values.routing.retryAfter }}
+
+    litellm_settings:
+      fallbacks:
+        - lilly-smart:
+            - lilly-compliance
+
+    general_settings:
+      master_key: os.environ/MASTER_KEY
+      database_url: os.environ/DATABASE_URL

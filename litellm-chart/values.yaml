@@ -1,0 +1,36 @@
+# Replica count - how many LiteLLM pods run simultaneously
+replicaCount: 1
+
+# Container image
+image:
+  repository: ghcr.io/berriai/litellm
+  tag: main-latest
+  pullPolicy: Always
+
+# Namespace to deploy into
+namespace: litellm
+
+# Resource limits per pod
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1000m"
+
+# LiteLLM routing settings
+routing:
+  strategy: least-busy
+  numRetries: 3
+  timeout: 30
+  retryAfter: 5
+
+# Postgres settings
+postgres:
+  storage: 10Gi
+
+# Service settings
+service:
+  type: LoadBalancer
+  port: 4000

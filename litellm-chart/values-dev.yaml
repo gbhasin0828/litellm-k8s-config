@@ -1,0 +1,17 @@
+namespace: litellm-dev
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+routing:
+  numRetries: 2
+  timeout: 20
+  retryAfter: 3
+
+postgres:
+  storage: 5Gi
